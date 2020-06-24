@@ -6,8 +6,15 @@ const name = 'inspect';
 const help = 'To get a summary of an XRPK, post `!inspect [name]` or the link to the XRPK';
 const regex = /xrpackage\.org\/inspect\.html\?p=([^\s]+)/;
 
-async function execute(message, args) {
-  const [packageName] = args;
+const predicate = message => {
+  if (message.content.match(regex)) return true;
+  return false;
+};
+
+const execute = async message => {
+  const match = message.content.match(regex);
+  const packageName = match ? match[1].trim() : message.content.slice(1).split(' ')[1];
+
   if (!packageName) return message.reply('No XRPK name was found in your message!');
 
   const res = await fetch(`${BASE_API_URL}${packageName}`);
@@ -32,6 +39,6 @@ async function execute(message, args) {
       },
     },
   });
-}
+};
 
-module.exports = {name, help, regex, execute};
+module.exports = {name, help, predicate, execute};

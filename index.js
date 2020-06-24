@@ -25,20 +25,9 @@ client.on('message', message => {
     return;
   }
 
-  // Find command handler for regex-commands
-  // Store the match so we don't have to re-perform the regex match inside the handler
-  let commandHandler;
-  let match;
-  for (const handler of client.commands.values()) {
-    if (!handler.regex) continue;
-    match = message.content.match(handler.regex);
-    if (!match) continue;
-    commandHandler = handler;
-    break;
-  }
-
-  if (commandHandler && match) {
-    commandHandler.execute(message, [match[1].trim()]);
+  const commandHandler = client.commands.find(c => c.predicate && c.predicate(message));
+  if (commandHandler) {
+    commandHandler.execute(message);
     return;
   }
 
@@ -49,7 +38,7 @@ client.on('message', message => {
   const command = args.shift().toLowerCase();
 
   if (client.commands.has(command)) {
-    client.commands.get(command).execute(message, args);
+    client.commands.get(command).execute(message);
   }
 });
 
