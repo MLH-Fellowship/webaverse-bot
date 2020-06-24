@@ -18,15 +18,9 @@ client.on('message', message => {
   // Ignore messages from the bot itself
   if (message.author.bot) return;
 
-  const args = message.content.slice(1).split(/ +/);
-  const command = args.shift().toLowerCase();
-
-  if (command === 'help') {
+  if (message.content === '!help') {
     let helpText = '\n';
-    client.commands.forEach(c => {
-      if (!c.name) return;
-      helpText += `!${c.name} => ${c.description}\n`;
-    });
+    client.commands.forEach(c => { helpText += c.name ? `- ${c.help}\n\n` : ''; });
     message.reply(helpText);
     return;
   }
@@ -35,18 +29,26 @@ client.on('message', message => {
   // Store the match so we don't have to re-perform the regex match inside the handler
   let commandHandler;
   let match;
-  for (const handler of client.commands.value()) {
+  for (const handler of client.commands.values()) {
     if (!handler.regex) continue;
     match = message.content.match(handler.regex);
-    if (match) {
-      commandHandler = handler;
-      break;
-    }
+    if (!match) continue;
+    commandHandler = handler;
+    break;
   }
 
   if (commandHandler && match) {
-    commandHandler.execute(message, match[1].trim());
-  } else if (client.commands.has(command)) {
+    commandHandler.execute(message, [match[1].trim()]);
+    return;
+  }
+
+  // If the message hasn't matched any of the command regexes, we must be looking for a `!command`
+  if (!message.content.startsWith('!')) return;
+
+  const args = message.content.slice(1).split(/ +/);
+  const command = args.shift().toLowerCase();
+
+  if (client.commands.has(command)) {
     client.commands.get(command).execute(message, args);
   }
 });
