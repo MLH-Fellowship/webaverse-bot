@@ -20,7 +20,17 @@ client.on('message', message => {
   const args = message.content.slice(1).split(/ +/);
   const command = args.shift().toLowerCase();
 
-  if (!client.commands.has(command)) return;
+  if (command === 'help') {
+    let helpText = '\n';
+    client.commands.forEach(c => {
+      if (!c.name) return;
+      helpText += `!${c.name} => ${c.description}\n`;
+    });
+    message.reply(helpText);
+    return;
+  } else if (!client.commands.has(command)) {
+    return;
+  }
 
   try {
     client.commands.get(command).execute(message, args);
