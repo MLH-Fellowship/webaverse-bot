@@ -15,7 +15,8 @@ for (const file of commandFiles) {
 client.once('ready', () => console.log('Client ready'));
 
 client.on('message', message => {
-  if (!message.content.startsWith('!') || message.author.bot) return;
+  // Ignore messages from the bot itself
+  if (message.author.bot) return;
 
   const args = message.content.slice(1).split(/ +/);
   const command = args.shift().toLowerCase();
@@ -28,15 +29,25 @@ client.on('message', message => {
     });
     message.reply(helpText);
     return;
-  } else if (!client.commands.has(command)) {
-    return;
   }
 
-  try {
+  // Find command handler for regex-commands
+  // Store the match so we don't have to re-perform the regex match inside the handler
+  let commandHandler;
+  let match;
+  for (const handler of client.commands.value()) {
+    if (!handler.regex) continue;
+    match = message.content.match(handler.regex);
+    if (match) {
+      commandHandler = handler;
+      break;
+    }
+  }
+
+  if (commandHandler && match) {
+    commandHandler.execute(message, match[1].trim());
+  } else if (client.commands.has(command)) {
     client.commands.get(command).execute(message, args);
-  } catch (error) {
-    console.error(error);
-    message.reply('There was an error trying to execute that command!');
   }
 });
 
