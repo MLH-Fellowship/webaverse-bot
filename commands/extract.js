@@ -20,7 +20,9 @@ const execute = async message => {
   const apiResponse = await res.json();
   const hash = apiResponse.dataHash;
 
-  const bundleData = await extract(`${BASE_IPFS_URL}${hash}.wbn`);
+  const resp = await fetch(`${BASE_IPFS_URL}${hash}.wbn`);
+  const buffer = await resp.buffer();
+  const bundleData = await extract(buffer);
 
   let listOfFiles = '';
   bundleData.urls.forEach(url => {
