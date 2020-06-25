@@ -20,7 +20,7 @@ client.on('message', message => {
 
   if (message.content === '!help') {
     let helpText = '\n';
-    client.commands.forEach(c => { helpText += c.name ? `- ${c.help}\n\n` : ''; });
+    client.commands.forEach(c => { helpText += c.name ? `- ${c.help}\n` : ''; });
     message.reply(helpText);
     return;
   }
