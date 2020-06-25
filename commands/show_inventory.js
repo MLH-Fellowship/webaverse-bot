@@ -8,7 +8,7 @@ const {
 } = require('../constants');
 
 const help =
-  'To view your inventory, type `!inventory USERNAME or click the inventory button in your application.';
+  'To view augs in your inventory, type `!inventory [username]`.';
 
 const execute = async (message) => {
   const username = message.content.split(' ')[1];
