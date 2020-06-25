@@ -26,10 +26,7 @@ client.on('message', message => {
   }
 
   const commandHandler = client.commands.find(c => c.predicate && c.predicate(message));
-  if (commandHandler) {
-    commandHandler.execute(message);
-    return;
-  }
+  if (commandHandler) return commandHandler.execute(message);
 
   // If the message hasn't matched any of the command regexes, we must be looking for a `!command`
   if (!message.content.startsWith('!')) return;

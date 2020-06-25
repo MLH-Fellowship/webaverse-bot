@@ -6,10 +6,7 @@ const name = 'inspect';
 const help = 'To get a summary of an XRPK, post `!inspect [name]` or the link to the XRPK';
 const regex = /xrpackage\.org\/inspect\.html\?p=([^\s]+)/;
 
-const predicate = message => {
-  if (message.content.match(regex)) return true;
-  return false;
-};
+const predicate = message => message.content.match(regex);
 
 const execute = async message => {
   const match = message.content.match(regex);
