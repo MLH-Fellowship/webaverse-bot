@@ -20,7 +20,8 @@
   "homepage": "https://github.com/MLH-Fellowship/webaverse-bot#readme",
   "dependencies": {
     "discord.js": "^12.2.0",
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "node-fetch": "^2.6.0"
   },
   "devDependencies": {
     "eslint": "^7.3.1",
