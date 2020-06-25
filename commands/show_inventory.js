@@ -24,6 +24,10 @@ const execute = async (message) => {
       embed: {
         title: `${username} Inventory - ${element.name}`,
         url: `${BASE_INSPECT_URL}?p=${element.name}`,
+        fields: [{
+          name: 'hash',
+          value: element.hash,
+        }],
       },
     });
   });
