@@ -7,6 +7,8 @@ const PACKAGE_NAME_REGEX = /^[a-z0-9][a-z0-9-._~]*$/;
 const BASE_USER_URL = 'https://users.exokit.org/';
 const BASE_WORLDS_URL = 'https://worlds.exokit.org/';
 
+const PRIMARY_URL = 'https://xrpackage.org/';
+
 module.exports = {
   BASE_INSPECT_URL,
   BASE_EDIT_URL,
@@ -16,4 +18,6 @@ module.exports = {
   PACKAGE_NAME_REGEX,
   BASE_USER_URL,
   BASE_WORLDS_URL,
+
+  PRIMARY_URL,
 };
