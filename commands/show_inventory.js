@@ -9,7 +9,7 @@ const {
 
 const help =
   'To view augs in your inventory, type `!inventory [username]`.';
-const predicate = message => message.content.startsWith('!inventory');
+const predicate = message => message.content.startsWith('!inventory') && message.attachments.size === 0;
 
 const execute = async (message) => {
   const username = message.content.split(' ')[1];

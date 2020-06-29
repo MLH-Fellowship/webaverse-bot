@@ -5,12 +5,11 @@ const {BASE_INSPECT_URL, BASE_USER_URL} = require('../constants');
 const name = 'upload-to-inventory';
 
 const help =
-  'To upload a package from your computer to your inventory, type `!inv [username]` when uploading a `.wbn` file.';
+  'To upload a package from your computer to your inventory, type `!inventory [username]` when uploading a `.wbn` file.';
 const predicate = (message) =>
-  message.attachments && message.content.startsWith('!inv');
+  message.attachments.size > 0 && message.content.startsWith('!inventory');
 
 const execute = async (message) => {
-  console.log(`MESSAGE: ${message.content}`);
   const username = message.content.split(' ')[1];
 
   const wbnAttachment = message.attachments.values().next().value;
@@ -23,21 +22,17 @@ const execute = async (message) => {
   try {
     message.reply('Attempting to upload package to inventory...');
     const uploadData = await uploadPackage(ipfsUrl, fileName);
-    console.log('FINISHED UPLOAD DATA');
     const user = await fetch(`${BASE_USER_URL}${username}`);
     const userObj = await user.json();
-    console.log(userObj);
     if (userObj.error) {
+      console.log(`userObj Error: ${userObj.error}`);
       return message.reply(`Unable to find a user named \`${username}\`.`);
     }
-    console.log(userObj);
     userObj.inventory.push({
       name: uploadData.metadata.name,
       hash: uploadData.metadata.dataHash,
       iconHash: uploadData.metadata.icons[0].hash,
     });
-    console.log(userObj);
-    console.log(JSON.stringify(userObj));
     const res = await fetch(`${BASE_USER_URL}${username}`, {
       method: 'PUT',
       body: JSON.stringify(userObj),
@@ -46,7 +41,7 @@ const execute = async (message) => {
     const resp = await res.json();
 
     if (!resp.ok) {
-      console.log(resp);
+      console.log(`user PUT response not ok: ${resp}`);
       return message.reply(
         `Error updating user inventory for \`${username}\`.`,
       );

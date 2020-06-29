@@ -5,8 +5,8 @@ const {extract} = require('../utils');
 
 const {PACKAGE_NAME_REGEX, BASE_IPFS_URL} = require('../constants');
 const name = 'upload';
-const help = 'To upload an XRPackage, send a .wbn file as an attachment to a message with "!upload"';
-const predicate = message => message.attachments && message.content.startsWith('!upload');
+const help = 'To upload an XRPackage, send a `.wbn` file as an attachment to a message with `!upload`';
+const predicate = message => message.attachments.size > 0 && message.content.startsWith('!upload');
 
 async function uploadPackage(xrpkUrl, xrpkName) {
   const res = await fetch(xrpkUrl);
