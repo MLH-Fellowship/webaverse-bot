@@ -1,9 +1,24 @@
 const fetch = require('node-fetch');
 
-const {BASE_IPFS_URL, BASE_USER_URL, BASE_API_URL} = require('../constants');
+const {extract} = require('../utils');
+
+const {BASE_IPFS_URL, BASE_USER_URL, BASE_API_URL, BASE_INSPECT_URL} = require('../constants');
 
 const name = 'avatar';
-const help = "To get a user's avatar, post `!avatar [username]`\nTo set a user's avatar, post `!avatar [username] [avatar name]`";
+const help = "To get a user's avatar, post `!avatar [username]`\n- To set a user's avatar, post `!avatar [username] [XRPK name]`";
+
+async function getPackageDetails(xrpkUrl) {
+  const res = await fetch(xrpkUrl);
+  const buffer = await res.buffer();
+  const bundleData = await extract(buffer);
+  const manifest = JSON.parse(bundleData.manifest);
+
+  const {name} = manifest;
+  const packageRes = await fetch(`${BASE_API_URL}${name}`);
+  const json = await packageRes.json();
+  const iconHash = json.icons.find(i => i.type === 'image/gif').hash;
+  return {name, gif: `${BASE_IPFS_URL}${iconHash}.gif`};
+}
 
 const execute = async message => {
   const args = message.content.slice(1).split(' ').slice(1);
@@ -46,12 +61,14 @@ const execute = async message => {
   }
 
   // Getting the current avatar
+  const packageDetails = await getPackageDetails(`${BASE_IPFS_URL}${userJson.avatarHash}.wbn`);
   return message.channel.send({
     embed: {
       title: `Current avatar for ${username}`,
-      fields: [
-        {name: 'hash', value: userJson.avatarHash},
-      ],
+      url: `${BASE_INSPECT_URL}?p=${packageDetails.name}`,
+      image: {url: packageDetails.gif},
+      description: `The current avatar for ${username} is ${packageDetails.name}`,
+      fields: [{name: 'hash', value: userJson.avatarHash}],
     },
   });
 };
