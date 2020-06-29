@@ -10,8 +10,11 @@ const predicate = (message) =>
   message.attachments.size > 0 && message.content.startsWith('!inventory');
 
 const execute = async (message) => {
-  const username = message.content.split(' ')[1];
-
+  const args = message.content.split(' ').slice(1);
+  const [username] = args;
+  if (!username) {
+    return message.reply('Please enter a username!');
+  }
   const wbnAttachment = message.attachments.values().next().value;
   const fileName = wbnAttachment.name;
   const ipfsUrl = wbnAttachment.attachment;
@@ -28,6 +31,7 @@ const execute = async (message) => {
       console.log(`userObj Error: ${userObj.error}`);
       return message.reply(`Unable to find a user named \`${username}\`.`);
     }
+
     userObj.inventory.push({
       name: uploadData.metadata.name,
       hash: uploadData.metadata.dataHash,

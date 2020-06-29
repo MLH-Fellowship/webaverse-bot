@@ -12,7 +12,11 @@ const help =
 const predicate = message => message.content.startsWith('!inventory') && message.attachments.size === 0;
 
 const execute = async (message) => {
-  const username = message.content.split(' ')[1];
+  const args = message.content.split(' ').slice(1);
+  const [username] = args;
+  if (!username) {
+    return message.reply('Please enter a username!');
+  }
   const res = await fetch(`${BASE_USER_URL}${username}`);
   const resp = await res.json();
 
