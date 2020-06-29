@@ -9,6 +9,7 @@ const {
 
 const help =
   'To view augs in your inventory, type `!inventory [username]`.';
+const predicate = message => message.content.startsWith('!inventory');
 
 const execute = async (message) => {
   const username = message.content.split(' ')[1];
@@ -33,4 +34,4 @@ const execute = async (message) => {
   });
 };
 
-module.exports = {name, help, execute};
+module.exports = {name, help, predicate, execute};

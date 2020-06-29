@@ -91,4 +91,4 @@ const execute = async message => {
   }
 };
 
-module.exports = {name, help, predicate, execute};
+module.exports = {name, help, predicate, execute, uploadPackage};
