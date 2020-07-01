@@ -26,16 +26,29 @@ client.on('message', message => {
   }
 
   const commandHandler = client.commands.find(c => c.predicate && c.predicate(message));
-  if (commandHandler) return commandHandler.execute(message);
+  if (commandHandler) {
+    try {
+      commandHandler.execute(message);
+    } catch (err) {
+      console.error(err);
+      message.reply('there was an error completing your command: ' + err.message);
+    }
+
+    return;
+  }
 
   // If the message hasn't matched any of the command regexes, we must be looking for a `!command`
   if (!message.content.startsWith('!')) return;
 
   const args = message.content.slice(1).split(/ +/);
   const command = args.shift().toLowerCase();
+  if (!client.commands.has(command)) return;
 
-  if (client.commands.has(command)) {
+  try {
     client.commands.get(command).execute(message);
+  } catch (err) {
+    console.error(err);
+    message.reply('there was an error completing your command: ' + err.message);
   }
 });
 
