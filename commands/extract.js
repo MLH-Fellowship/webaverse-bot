@@ -8,7 +8,7 @@ const name = 'extract';
 const help = 'To get a list of files in an XRPK, post `!extract [name]` or `!extract [link to the XRPK on xrpackage.org]`';
 const regex = /xrpackage\.org\/inspect\.html\?p=([^\s]+)/;
 
-const predicate = message => message.content.match(regex);
+const predicate = message => message.content.match(regex) && message.content.startsWith('!extract');
 
 const execute = async message => {
   const match = message.content.match(regex);
