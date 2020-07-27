@@ -3,7 +3,7 @@ const fetch = require('node-fetch');
 const {BASE_USER_URL, BASE_API_URL} = require('../constants');
 
 const name = 'remove';
-const help = 'To remove a package to your inventory, post `!remove [package] [username]`.';
+const help = 'To remove a package from your inventory, post `!remove [XRPK name] [username]`.';
 
 const execute = async message => {
   const packageName = message.content.slice(1).split(' ')[1];

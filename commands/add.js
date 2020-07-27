@@ -3,7 +3,7 @@ const fetch = require('node-fetch');
 const {BASE_USER_URL, BASE_API_URL} = require('../constants');
 
 const name = 'add';
-const help = 'To add a package to your inventory, post `!add [package] [username]`.';
+const help = 'To add a package to your inventory, post `!add [XRPK name] [username]`.';
 
 const execute = async message => {
   const packageName = message.content.slice(1).split(' ')[1];
