@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 
-const {BASE_INSPECT_URL, BASE_IPFS_URL, BASE_API_URL} = require('../constants');
+const {BASE_USER_URL, BASE_API_URL} = require('../constants');
 
 const name = 'add';
 const help = 'To add a package to your inventory, post `!add [package] [username]`.';
@@ -14,22 +14,36 @@ const execute = async message => {
     const packageObj = await packageRes.json();
 
     if (packageObj.error) {
-        throw new Error(packageRes.status);
-        return message.reply('No XRPK name was found!');
+        return message.reply(`the package "${packageName}" was not found!`);
     }
 
     const userRes = await fetch(`${BASE_USER_URL}${username}`);
     const userObj = await userRes.json();
 
     if (userObj.error) {
-        throw new Error(userRes.status)
-        return message.reply('No user was found!');
+        return message.reply(`the user "${username}" was not found!`);
     }
 
-    userObj.inventory.push({ packageObj });
+    userObj.inventory.push({
+        name: packageObj.name,
+        dataHash: packageObj.dataHash,
+        iconHash: packageObj.icons.find(i => i.type === 'image/gif').hash,
+    });
     console.log(userObj.inventory);
 
-    message.reply(`Added "${packageName}" XRPK from Inventory`);
+    const setRes = await fetch(`${BASE_USER_URL}${username}`, {
+        method: 'PUT',
+        body: JSON.stringify(userObj),
+    });
+
+    const setJson = await setRes.json();
+    if (!setJson.ok) {
+        console.error(setJson);
+        return message.reply(`there was an error adding ${packageName} to ${username}'s inventory`);
+    } else {
+        message.reply(`Added "${packageName}" XRPK from Inventory`);
+    }
+
 };
 
 module.exports = {name, help, execute};
