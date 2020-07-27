@@ -12,24 +12,23 @@ const predicate = (message) =>
 const execute = async (message) => {
   const args = message.content.split(' ').slice(1);
   const [username] = args;
-  if (!username) {
-    return message.reply('Please enter a username!');
-  }
+  if (!username) return message.reply('please enter a username!');
+
   const wbnAttachment = message.attachments.values().next().value;
   const fileName = wbnAttachment.name;
   const ipfsUrl = wbnAttachment.attachment;
   if (!fileName.endsWith('.wbn')) {
-    return message.reply("Please make sure you're uploading a `.wbn` file!");
+    return message.reply("please make sure you're uploading a `.wbn` file!");
   }
 
   try {
-    message.reply('Attempting to upload package to inventory...');
+    message.reply('attempting to upload package to inventory...');
     const uploadData = await uploadPackage(ipfsUrl, fileName);
     const user = await fetch(`${BASE_USER_URL}${username}`);
     const userObj = await user.json();
     if (userObj.error) {
       console.log(`userObj Error: ${userObj.error}`);
-      return message.reply(`Unable to find a user named \`${username}\`.`);
+      return message.reply(`unable to find a user named \`${username}\`.`);
     }
 
     userObj.inventory.push({
@@ -47,7 +46,7 @@ const execute = async (message) => {
     if (!resp.ok) {
       console.log(`user PUT response not ok: ${resp}`);
       return message.reply(
-        `Error updating user inventory for \`${username}\`.`,
+        `error updating user inventory for \`${username}\`.`,
       );
     }
 
@@ -63,7 +62,7 @@ const execute = async (message) => {
     });
   } catch (err) {
     console.log(`Error uploading package ${fileName} to  IPFS: ${err.message}`);
-    message.reply(`There was an error uploading your package: ${err.message}`);
+    message.reply(`there was an error uploading your package: ${err.message}`);
   }
 };
 

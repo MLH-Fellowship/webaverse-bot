@@ -23,7 +23,7 @@ async function getPackageDetails(xrpkUrl) {
 const execute = async message => {
   const args = message.content.slice(1).split(' ').slice(1);
   const [username, avatarName] = args;
-  if (!username) return message.reply('No username was found in your message!');
+  if (!username) return message.reply('no username was found in your message!');
 
   const res = await fetch(`${BASE_USER_URL}${username}`);
   const userJson = await res.json();

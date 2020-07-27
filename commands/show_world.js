@@ -12,7 +12,7 @@ const execute = async message => {
   const match = message.content.match(regex);
   const worldId = match ? match[1].trim() : message.content.slice(1).split(' ')[1];
 
-  if (!worldId) return message.reply('No world ID was found in your message!');
+  if (!worldId) return message.reply('no world ID was found in your message!');
 
   const res = await fetch(`${BASE_WORLDS_URL}${worldId}`);
   const apiResponse = await res.json();

@@ -14,7 +14,7 @@ const execute = async message => {
   const match = message.content.match(regex);
   const packageName = match ? match[1].trim() : message.content.slice(1).split(' ')[1];
 
-  if (!packageName) return message.reply('No XRPK name was found in your message!');
+  if (!packageName) return message.reply('no XRPK name was found in your message!');
 
   const res = await fetch(`${BASE_API_URL}${packageName}`);
   const apiResponse = await res.json();

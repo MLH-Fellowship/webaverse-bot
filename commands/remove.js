@@ -8,7 +8,7 @@ const help = 'To remove a package from your inventory, post `!remove [XRPK name]
 const execute = async message => {
   const packageName = message.content.slice(1).split(' ')[1];
   const username = message.content.slice(1).split(' ')[2];
-  if (!username || !packageName) return message.reply('Incorrect usage.');
+  if (!username || !packageName) return message.reply('no XRPK name or username found!');
 
   const packageRes = await fetch(`${BASE_API_URL}${packageName}`);
   const packageObj = await packageRes.json();
@@ -38,7 +38,7 @@ const execute = async message => {
     console.error(setJson);
     return message.reply(`there was an error removing ${packageName} from ${username}'s inventory`);
   } else {
-    message.reply(`Removed "${packageName}" XRPK from Inventory`);
+    message.reply(`removed "${packageName}" XRPK from inventory!`);
   }
 };
 

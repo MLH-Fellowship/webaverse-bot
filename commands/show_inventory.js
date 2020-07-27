@@ -14,9 +14,8 @@ const predicate = message => message.content.startsWith('!inventory') && message
 const execute = async (message) => {
   const args = message.content.split(' ').slice(1);
   const [username] = args;
-  if (!username) {
-    return message.reply('Please enter a username!');
-  }
+  if (!username) return message.reply('please enter a username!');
+
   const res = await fetch(`${BASE_USER_URL}${username}`);
   const resp = await res.json();
 

@@ -8,7 +8,7 @@ const help = 'To add a package to your inventory, post `!add [XRPK name] [userna
 const execute = async message => {
   const packageName = message.content.slice(1).split(' ')[1];
   const username = message.content.slice(1).split(' ')[2];
-  if (!username || !packageName) return message.reply('Incorrect usage.');
+  if (!username || !packageName) return message.reply('no XRPK name or username found!');
 
   const packageRes = await fetch(`${BASE_API_URL}${packageName}`);
   const packageObj = await packageRes.json();
